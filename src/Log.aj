@@ -25,7 +25,6 @@ public aspect Log {
 		//ejecución al retornar el método
 		after() returning(Object resultado): retornarLog() {
 			Comando valor = (Comando) resultado;
-			System.out.println("Valor del comando: " + valor);
 			if(valor == null) {
 				System.out.println("----------------------------- EVENTOS DEL DIA ----------------------");
 				for(int i = 0; i < logEvents.size(); i++) {

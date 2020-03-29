@@ -11,17 +11,17 @@ public aspect SaldoReducido {
 	}
 	
 	
-	pointcut retirarControl() : call( * ejemplo.cajero.modelo.Cuenta.retirar(..));
+	pointcut retirarControl(long valor) : call( * ejemplo.cajero.modelo.Cuenta.retirar(..)) && args(valor);
 	
-	Object around() throws Exception : retirarControl() {
+	Object around(long valor) throws Exception : retirarControl(valor) {
 		//System.out.println("Ingreso al metodo sin saldo!!: " + cuenta.getSaldo());
-		if (cuenta.getSaldo() > 200){
+		if (cuenta.getSaldo() - valor >= 200){
 			//System.out.println("Ingreso al metodo!!: " + cuenta.getSaldo());
-			 proceed();
+			 proceed(valor);
 			 
 		}else {
 			//System.out.println("No se puede tener menos de 200 de saldo!!");
-			throw new Exception("No se puede tener menos de 200 de saldo!!");
+			throw new Exception("No se puede tener menos de 200 de saldo!!, Saldo actual: " + cuenta.getSaldo() + " valor solicitado: " + valor );
 		}
 		return 0;
 		
